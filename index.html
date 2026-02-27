@@ -2,331 +2,350 @@
 <html lang="km">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7B2 // PREMIER AUDIO STATION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>7B2 // VECTOR SHIFT</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&family=Moul&family=Orbitron:wght@600;900&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&family=Moul&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00f2ff;
-            --accent: #7000ff;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --cyan: #00f2ff;
+            --purple: #7000ff;
+            --gold: #ffcc00;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', 'Kantumruy Pro', sans-serif;
+            font-family: 'Kantumruy Pro', sans-serif;
             background: #020205;
             color: #ffffff;
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Dynamic Mesh Background */
-        .bg-mesh {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(112, 0, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(0, 242, 255, 0.15) 0%, transparent 50%),
-                #020205;
+            overflow: hidden;
         }
 
         .khmer-moul { font-family: 'Moul', cursive; }
-        .font-gamer { font-family: 'Orbitron', sans-serif; }
+        .font-sigma { font-family: 'Orbitron', sans-serif; letter-spacing: 3px; }
 
-        /* Portal Selector */
-        .portal-container {
-            display: flex;
+        /* 3D Choose Screen UI */
+        .portal-wrapper {
             height: 100vh;
-            padding: 2rem;
-            gap: 2rem;
+            display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease;
+            perspective: 1500px;
+            background: radial-gradient(circle at center, #0a0a1a 0%, #020205 100%);
         }
 
-        .portal-card {
+        .choice-container {
+            display: flex;
+            gap: 40px;
+            width: 90%;
+            max-width: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .choice-card {
             flex: 1;
-            height: 60vh;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--glass-border);
+            height: 450px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
             border-radius: 40px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            backdrop-filter: blur(20px);
+            overflow: hidden;
         }
 
-        .portal-card:hover {
-            transform: translateY(-15px);
-            border-color: var(--primary);
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+        /* The "Cool" Glow Effect */
+        .choice-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, var(--glow-color), transparent 70%);
+            opacity: 0;
+            transition: 0.5s;
+            z-index: -1;
         }
 
-        /* Floating Notifications */
-        .notif-stack {
+        .choice-card:hover {
+            transform: translateZ(50px) rotateX(5deg) rotateY(-5deg);
+            border-color: var(--glow-color);
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.15);
+        }
+
+        .choice-card:hover::before { opacity: 0.3; }
+
+        .choice-card .icon {
+            font-size: 6rem;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 20px var(--glow-color));
+            transition: 0.5s;
+        }
+
+        .choice-card:hover .icon {
+            transform: scale(1.2) translateZ(30px);
+        }
+
+        /* Floating elements in background */
+        .particles {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            inset: 0;
+            z-index: -1;
             pointer-events: none;
         }
 
-        .notif-item {
-            width: 280px;
-            background: rgba(10, 10, 15, 0.9);
-            border: 1px solid var(--primary);
+        /* Notifications with improved SFX and Glass */
+        .notif-stack {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sigma-notif {
+            width: 330px;
+            background: rgba(10, 10, 20, 0.8);
+            backdrop-filter: blur(25px);
+            border-right: 4px solid var(--cyan);
             border-radius: 20px;
-            padding: 12px;
+            padding: 18px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            transform: translateX(150%);
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            gap: 15px;
+            transform: translateX(120%);
+            transition: 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        .notif-item.show { transform: translateX(0); }
+        .sigma-notif.show { transform: translateX(0); }
 
-        .notif-img {
-            width: 55px;
-            height: 55px;
-            border-radius: 12px;
+        .notif-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 15px;
             object-fit: cover;
-            border: 1px solid var(--primary);
+            border: 2px solid var(--cyan);
         }
 
-        /* Glass Cards */
-        .glass-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(15px);
-            border-radius: 32px;
-            transition: all 0.3s;
-        }
-
-        .today-active {
-            border-color: var(--primary);
-            background: rgba(0, 242, 255, 0.05);
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.1);
-        }
-
-        .neon-glow {
-            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
-        }
-
-        /* Audio Control */
-        #audioStatus {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 10px;
-            font-family: 'Orbitron', sans-serif;
-            color: var(--primary);
-            background: rgba(0,0,0,0.5);
-            padding: 5px 10px;
-            border-radius: 20px;
-            display: none;
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--cyan);
+            width: 100%;
+            transform-origin: left;
         }
 
         @media (max-width: 768px) {
-            .portal-container { flex-direction: column; height: auto; padding-top: 10vh; }
-            .portal-card { height: 35vh; width: 100%; }
+            .choice-container { flex-direction: column; height: auto; padding: 20px; }
+            .choice-card { height: 300px; width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-mesh"></div>
-    
-    <!-- Audio Element -->
+    <div class="particles" id="particles"></div>
+
+    <!-- AUDIO SYSTEM -->
     <audio id="bgMusic" loop>
         <source src="https://files.catbox.moe/m07uk3.mp4" type="audio/mp4">
     </audio>
-    <div id="audioStatus">🔊 AUDIO SYNCED</div>
+    <audio id="pingSound">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" type="audio/mpeg">
+    </audio>
 
-    <!-- Notification Container -->
-    <div id="notifArea" class="notif-stack"></div>
-
-    <!-- SELECTOR -->
-    <div id="selectorScreen" class="portal-container">
-        <div onclick="initApp('morning')" class="portal-card">
-            <div class="text-6xl mb-4">🌅</div>
-            <h2 class="khmer-moul text-4xl">ពេលព្រឹក</h2>
-            <p class="font-gamer text-[10px] tracking-[0.5em] text-cyan-400 opacity-50 mt-4">STATION_01</p>
-        </div>
-        <div onclick="initApp('afternoon')" class="portal-card">
-            <div class="text-6xl mb-4">☀️</div>
-            <h2 class="khmer-moul text-4xl text-purple-400">ពេលថ្ងៃ</h2>
-            <p class="font-gamer text-[10px] tracking-[0.5em] text-purple-400 opacity-50 mt-4">STATION_02</p>
+    <!-- SELECTOR SCREEN -->
+    <div id="selector" class="portal-wrapper">
+        <div class="choice-container">
+            <div onclick="launch('morning')" class="choice-card" style="--glow-color: var(--cyan);">
+                <div class="icon">🌅</div>
+                <h2 class="khmer-moul text-4xl mb-4">ពេលព្រឹក</h2>
+                <p class="font-sigma text-[10px] opacity-40">STATION_MORNING</p>
+            </div>
+            <div onclick="launch('afternoon')" class="choice-card" style="--glow-color: var(--purple);">
+                <div class="icon">☀️</div>
+                <h2 class="khmer-moul text-4xl mb-4 text-purple-400">ពេលថ្ងៃ</h2>
+                <p class="font-sigma text-[10px] opacity-40">STATION_AFTERNOON</p>
+            </div>
         </div>
     </div>
 
-    <!-- DASHBOARD -->
-    <div id="dashboard" class="hidden pb-20">
-        <header class="max-w-7xl mx-auto p-6 md:p-10 flex flex-col md:flex-row justify-between items-center gap-6">
+    <!-- MAIN APP SCREEN -->
+    <div id="app" class="hidden min-h-screen">
+        <div class="notif-stack" id="notifArea"></div>
+
+        <nav class="p-8 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
             <div class="flex items-center gap-6">
-                <div class="w-14 h-14 rounded-2xl bg-cyan-500 flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(0,242,255,0.4)]">⚡</div>
+                <div class="w-16 h-16 rounded-[24px] bg-gradient-to-br from-cyan-400 to-blue-700 flex items-center justify-center text-3xl shadow-xl">🔱</div>
                 <div>
-                    <h1 class="khmer-moul text-2xl md:text-3xl neon-glow">កាលវិភាគ 7B2</h1>
-                    <p id="modeInfo" class="font-gamer text-[9px] tracking-[0.4em] text-cyan-400"></p>
+                    <h1 class="khmer-moul text-3xl">កាលវិភាគ 7B2</h1>
+                    <p id="modeStatus" class="font-sigma text-[8px] text-cyan-400 mt-1"></p>
                 </div>
             </div>
-
-            <div class="glass-card px-10 py-4 text-center">
-                <div id="clock" class="font-gamer text-3xl neon-glow">00:00:00</div>
-                <div id="dateDisplay" class="khmer-moul text-[10px] opacity-40">ថ្ងៃ... ខែ...</div>
+            
+            <div class="bg-white/5 border border-white/10 px-10 py-5 rounded-[30px] mt-6 md:mt-0">
+                <div id="clock" class="font-sigma text-4xl">00:00:00</div>
+                <div id="date" class="khmer-moul text-[10px] opacity-40 text-center"></div>
             </div>
-        </header>
+        </nav>
 
-        <main id="scheduleGrid" class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4">
-            <!-- Cards -->
+        <main id="scheduleGrid" class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 pb-20">
+            <!-- Dynamic Grid -->
         </main>
 
-        <footer class="mt-20 text-center">
-            <p class="font-gamer text-[10px] tracking-[1em] opacity-20">SIGMA AUDIO SYSTEM</p>
-            <p class="khmer-moul text-lg bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">មាស ប៊ុណ្ណាVit</p>
+        <footer class="py-20 text-center opacity-20">
+            <p class="font-sigma text-[9px] tracking-[2em]">SIGMA VECTOR OS</p>
+            <p class="khmer-moul text-xl mt-4">មាស ប៊ុណ្ណាVit</p>
         </footer>
     </div>
 
     <script>
         const subjects = [
-            { day: 'ចន្ទ (Monday)', sessions: ['អង់គ្លេស', 'ប្រវត្តិវិទ្យា', 'គណិតវិទ្យា', 'គណិតវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
-            { day: 'អង្គារ (Tuesday)', sessions: ['អក្សរសាស្ត្រខ្មែរ', 'ភាសាចិន', 'ផែនដីវិទ្យា', 'ភូមិវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
-            { day: 'ពុធ (Wednesday)', sessions: ['គណិតវិទ្យា', 'គណិតវិទ្យា', 'គីមីវិទ្យា', 'ជីវវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
-            { day: 'ព្រហស្បតិ៍ (Thursday)', sessions: ['អក្សរសាស្ត្រខ្មែរ', 'អក្សរសាស្ត្រខ្មែរ', 'សីលធម៌-ពលរដ្ឋ', 'ជីវវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
-            { day: 'សុក្រ (Friday)', sessions: ['អក្សរសាស្ត្រខ្មែរ', 'អក្សរសាស្ត្រខ្មែរ', 'សីលធម៌-ពលរដ្ឋ', 'រូបវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
-            { day: 'សៅរ៍ (Saturday)', sessions: ['ភូមិវិទ្យា', 'គណិតវិទ្យា', 'គណិតវិទ្យា', 'អង់គ្លេស'], times: ['13:00', '14:00', '15:00', '16:00'] }
+            { day: 'ចន្ទ (Monday)', list: ['អង់គ្លេស', 'ប្រវត្តិវិទ្យា', 'គណិតវិទ្យា', 'គណិតវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
+            { day: 'អង្គារ (Tuesday)', list: ['អក្សរសាស្ត្រខ្មែរ', 'ភាសាចិន', 'ផែនដីវិទ្យា', 'ភូមិវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
+            { day: 'ពុធ (Wednesday)', list: ['គណិតវិទ្យា', 'គណិតវិទ្យា', 'គីមីវិទ្យា', 'ជីវវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
+            { day: 'ព្រហស្បតិ៍ (Thursday)', list: ['អក្សរសាស្ត្រខ្មែរ', 'អក្សរសាស្ត្រខ្មែរ', 'សីលធម៌-ពលរដ្ឋ', 'ជីវវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
+            { day: 'សុក្រ (Friday)', list: ['អក្សរសាស្ត្រខ្មែរ', 'អក្សរសាស្ត្រខ្មែរ', 'សីលធម៌-ពលរដ្ឋ', 'រូបវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
+            { day: 'សៅរ៍ (Saturday)', list: ['ភូមិវិទ្យា', 'គណិតវិទ្យា', 'គណិតវិទ្យា', 'អង់គ្លេស'], times: ['13:00', '14:00', '15:00', '16:00'] }
         ];
 
-        const alerts = [
-            { title: "SIGMA BOY", img: "https://files.catbox.moe/7d1nsp.jpeg" },
-            { title: "The me", img: "https://files.catbox.moe/3nnv91.jpeg" },
-            { title: "Alien", img: "https://files.catbox.moe/ktl2m7.jpeg" },
-            { title: "Your Boyfriend", img: "https://files.catbox.moe/0g2t2o.jpeg" }
+        const memers = [
+            { t: "SIGMA BOY", i: "https://files.catbox.moe/7d1nsp.jpeg" },
+            { t: "The me", i: "https://files.catbox.moe/3nnv91.jpeg" },
+            { t: "Alien", i: "https://files.catbox.moe/ktl2m7.jpeg" },
+            { t: "Your Boyfriend", i: "https://files.catbox.moe/0g2t2o.jpeg" }
         ];
 
-        const audio = document.getElementById('bgMusic');
+        const bgMusic = document.getElementById('bgMusic');
+        const pingSfx = document.getElementById('pingSound');
 
-        // VISIBILITY API: Pause music when leaving tab
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                audio.pause();
-            } else {
-                if (document.getElementById('dashboard').style.display === 'block') {
-                    audio.play();
-                }
-            }
-        });
-
-        function initApp(mode) {
-            // Start Audio
-            audio.play().catch(e => console.log("Audio needs interaction"));
-            document.getElementById('audioStatus').style.display = 'block';
-
-            document.getElementById('modeInfo').innerText = `PROTOCOL: ${mode.toUpperCase()}`;
-            document.getElementById('selectorScreen').style.opacity = '0';
+        function launch(mode) {
+            bgMusic.play().catch(() => {});
+            document.getElementById('selector').style.opacity = '0';
+            document.getElementById('modeStatus').innerText = `SESSION // ${mode.toUpperCase()}`;
             
             setTimeout(() => {
-                document.getElementById('selectorScreen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('selector').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                renderSchedule();
+                playNotifs();
                 
-                renderGrid();
-                triggerAlerts();
-                
-                // Scroll focus
                 setTimeout(() => {
-                    const focus = document.getElementById('active-card');
-                    if (focus) focus.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const el = document.querySelector('.active-card');
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 500);
-            }, 500);
+            }, 600);
         }
 
-        function triggerAlerts() {
+        function playNotifs() {
             const container = document.getElementById('notifArea');
-            alerts.forEach((a, i) => {
+            memers.forEach((m, i) => {
                 setTimeout(() => {
-                    const item = document.createElement('div');
-                    item.className = 'notif-item';
-                    item.innerHTML = `
-                        <img src="${a.img}" class="notif-img">
-                        <div>
-                            <p class="font-gamer text-[7px] text-cyan-400">ACTIVE_SIGNAL</p>
-                            <p class="font-bold text-sm">${a.title}</p>
+                    pingSfx.currentTime = 0;
+                    pingSfx.play().catch(() => {});
+
+                    const div = document.createElement('div');
+                    div.className = 'sigma-notif';
+                    div.innerHTML = `
+                        <img src="${m.i}" class="notif-avatar" onerror="this.src='https://via.placeholder.com/65'">
+                        <div class="flex-1">
+                            <p class="font-sigma text-[7px] text-cyan-400 opacity-60">INCOMING_DATA</p>
+                            <p class="text-sm font-bold">${m.t}</p>
                         </div>
+                        <div class="progress-bar" style="animation: progress-out 4s linear forwards;"></div>
                     `;
-                    container.appendChild(item);
-                    setTimeout(() => item.classList.add('show'), 100);
+                    container.appendChild(div);
+                    setTimeout(() => div.classList.add('show'), 100);
+
                     setTimeout(() => {
-                        item.classList.remove('show');
-                        setTimeout(() => item.remove(), 500);
+                        div.classList.remove('show');
+                        setTimeout(() => div.remove(), 700);
                     }, 4000);
-                }, i * 1500);
+                }, i * 1800);
             });
         }
 
-        function renderGrid() {
+        function renderSchedule() {
             const grid = document.getElementById('scheduleGrid');
             grid.innerHTML = '';
             
-            const now = new Date();
-            const pph = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Phnom_Penh"}));
-            let dIdx = pph.getDay();
+            const pph = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Phnom_Penh"}));
+            let day = pph.getDay();
             let hr = pph.getHours();
+            let target = (hr >= 21) ? (day + 1) % 7 : day;
 
-            let target = dIdx;
-            if (hr >= 21) target = (dIdx + 1) % 7;
-
-            subjects.forEach((item, index) => {
-                const dayVal = index + 1;
-                const isToday = (dayVal === target);
+            subjects.forEach((data, index) => {
+                const dayNum = index + 1;
+                const isActive = (dayNum === target);
                 
                 const card = document.createElement('div');
-                if (isToday) card.id = 'active-card';
-                card.className = `glass-card p-8 ${isToday ? 'today-active scale-105 z-10' : 'opacity-25'}`;
+                card.className = `p-8 rounded-[40px] border transition-all duration-500 ${isActive ? 'active-card border-cyan-500/50 bg-cyan-500/5 shadow-2xl scale-105' : 'border-white/5 opacity-20 grayscale'}`;
 
                 let html = '';
-                item.sessions.forEach((s, i) => {
+                data.list.forEach((s, i) => {
                     html += `
-                        <div class="flex items-center justify-between py-3 border-b border-white/5 last:border-0">
-                            <span class="font-bold text-lg">${s}</span>
-                            <span class="font-gamer text-[8px] opacity-40">${item.times[i]}</span>
+                        <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl mb-2 border border-transparent hover:border-cyan-500/30 transition-all">
+                            <span class="font-bold text-sm">${s}</span>
+                            <span class="font-sigma text-[8px] text-cyan-400 opacity-60">${data.times[i]}</span>
                         </div>
                     `;
                 });
 
                 card.innerHTML = `
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="khmer-moul text-xl ${isToday ? 'neon-glow text-cyan-400' : ''}">${item.day}</h3>
-                        ${isToday ? `<span class="bg-cyan-500 text-black font-gamer text-[8px] px-2 rounded">FOCUS</span>` : ''}
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="khmer-moul text-xl ${isActive ? 'text-cyan-400' : ''}">${data.day}</h3>
+                        ${isActive ? '<span class="px-3 py-1 bg-cyan-500 text-black font-sigma text-[8px] rounded-full">ACTIVE</span>' : ''}
                     </div>
-                    <div class="space-y-1">${html}</div>
+                    <div>${html}</div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        function clock() {
+        function updateClock() {
             const now = new Date();
             const time = now.toLocaleString("en-US", {timeZone: "Asia/Phnom_Penh", hour:'2-digit', minute:'2-digit', second:'2-digit', hour12: false});
             const date = now.toLocaleString("km-KH", {timeZone: "Asia/Phnom_Penh", weekday: 'long', day: 'numeric', month: 'long'});
             document.getElementById('clock').innerText = time;
-            document.getElementById('dateDisplay').innerText = date;
+            document.getElementById('date').innerText = date;
         }
 
-        setInterval(clock, 1000);
-        clock();
+        // Handle Sound Stop on Tab Leave
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) bgMusic.pause();
+            else if (document.getElementById('app').style.display === 'block') bgMusic.play();
+        });
+
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Create background particles
+        const pContainer = document.getElementById('particles');
+        for(let i=0; i<30; i++) {
+            const p = document.createElement('div');
+            p.style.position = 'absolute';
+            p.style.width = '2px';
+            p.style.height = '2px';
+            p.style.background = 'white';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.top = Math.random() * 100 + 'vh';
+            p.style.opacity = Math.random() * 0.5;
+            pContainer.appendChild(p);
+        }
     </script>
+    <style>
+        @keyframes progress-out {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0); }
+        }
+    </style>
 </body>
 </html>
 
