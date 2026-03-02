@@ -3,27 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>7B2 // SIGMA FINAL</title>
+    <title>7B2 // SIGMA ELITE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&family=Moul&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --cyan: #00f2ff;
-            --neon-pink: #ff007f;
-        }
-
+        :root { --cyan: #00f2ff; --pink: #ff007f; }
         body {
             font-family: 'Kantumruy Pro', sans-serif;
             background-color: #020205;
             color: #ffffff;
             margin: 0;
-            padding: 0;
-            min-height: 100vh;
             overflow-x: hidden;
             overflow-y: auto;
             scroll-behavior: smooth;
         }
-
         .khmer-moul { font-family: 'Moul', cursive; }
         .font-sigma { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
 
@@ -31,285 +24,294 @@
             position: fixed;
             inset: 0;
             z-index: -1;
-            background: linear-gradient(135deg, #020205 0%, #0a0a1a 100%);
+            background: radial-gradient(circle at center, #0a0a1f 0%, #020205 100%);
         }
 
-        /* Neon Creator Text */
-        .neon-signature {
+        .neon-glow {
             color: #fff;
-            text-shadow: 
-                0 0 7px var(--cyan),
-                0 0 10px var(--cyan),
-                0 0 21px var(--cyan),
-                0 0 42px var(--cyan);
+            text-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
             animation: neonPulse 1.5s infinite alternate;
         }
 
         @keyframes neonPulse {
-            from { text-shadow: 0 0 5px var(--cyan), 0 0 10px var(--cyan), 0 0 15px var(--cyan); }
-            to { text-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan), 0 0 30px var(--cyan), 0 0 40px var(--cyan); }
+            from { text-shadow: 0 0 5px var(--cyan), 0 0 10px var(--cyan); opacity: 0.8; }
+            to { text-shadow: 0 0 15px var(--cyan), 0 0 30px var(--cyan); opacity: 1; }
         }
 
-        .portal-container {
+        .step-screen {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
             justify-content: center;
             align-items: center;
-            gap: 20px;
             padding: 20px;
+            animation: slideUp 0.6s ease-out;
         }
 
-        @media (min-width: 768px) { .portal-container { flex-direction: row; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .btn-choice {
+        .search-input {
             width: 100%;
-            max-width: 350px;
-            padding: 40px 20px;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        .name-box {
+            width: 100%;
+            max-width: 400px;
+            max-height: 250px;
+            overflow-y: auto;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            text-align: center;
+            border-radius: 12px;
+        }
+
+        .name-row {
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .name-row:hover { background: rgba(0, 242, 255, 0.15); color: var(--cyan); }
+
+        .sigma-textarea {
+            width: 100%;
+            max-width: 400px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            resize: none;
+            outline: none;
+        }
+
+        .btn-sigma {
+            padding: 12px 35px;
+            background: var(--cyan);
+            color: black;
+            border-radius: 50px;
+            font-weight: 900;
             cursor: pointer;
             transition: 0.3s;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
         }
 
-        .btn-choice:hover {
-            border-color: var(--cyan);
-            background: rgba(0, 242, 255, 0.05);
+        .btn-sigma:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--cyan); }
+
+        .skip-text {
+            margin-top: 20px;
+            opacity: 0.4;
+            font-size: 10px;
+            cursor: pointer;
+            text-decoration: underline;
         }
 
-        .notif-stack {
-            position: fixed;
-            top: 20px;
-            right: 15px;
-            z-index: 9999;
-            pointer-events: none;
-        }
-
-        .notif-card {
-            width: 280px;
-            background: rgba(10, 10, 15, 0.95);
-            backdrop-filter: blur(10px);
-            border-left: 3px solid var(--cyan);
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transform: translateX(150%);
-            transition: 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            pointer-events: auto;
-        }
-
-        .notif-card.active { transform: translateX(0); }
-
-        .card-glass {
+        .glass-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             padding: 20px;
-            transition: 0.5s;
         }
 
-        .card-active {
-            border-color: var(--cyan);
-            background: rgba(0, 242, 255, 0.04);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
-        }
-
-        .item-box {
-            background: rgba(255, 255, 255, 0.03);
-            margin-bottom: 8px;
-            padding: 10px 15px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .active-day { border-color: var(--cyan); background: rgba(0, 242, 255, 0.03); }
 
         .hidden { display: none !important; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <div class="master-bg"></div>
 
-    <audio id="bgMusic" loop>
-        <source src="https://files.catbox.moe/m07uk3.mp4" type="audio/mp4">
-    </audio>
-    <audio id="notifSfx">
-        <source src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="musMorning" loop><source src="https://files.catbox.moe/l6fo2d.mp4" type="audio/mp4"></audio>
+    <audio id="musAfternoon" loop><source src="https://files.catbox.moe/yluiv3.mp4" type="audio/mp4"></audio>
+    <audio id="sfx"><source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg"></audio>
 
-    <!-- SELECTOR -->
-    <div id="selector" class="portal-container">
-        <div onclick="initApp('morning')" class="btn-choice">
-            <span class="text-6xl mb-4 block">🌅</span>
-            <h2 class="khmer-moul text-2xl">ពេលព្រឹក</h2>
-            <p class="font-sigma text-[8px] text-cyan-400 opacity-50 uppercase mt-2">Mode: Early Bird</p>
-        </div>
-        <div onclick="initApp('afternoon')" class="btn-choice">
-            <span class="text-6xl mb-4 block">☀️</span>
-            <h2 class="khmer-moul text-2xl text-pink-500">ពេលថ្ងៃ</h2>
-            <p class="font-sigma text-[8px] text-pink-500 opacity-50 uppercase mt-2">Mode: Afternoon Sigma</p>
+    <!-- STEP 1: NAME SELECTOR -->
+    <div id="step1" class="step-screen">
+        <h2 class="khmer-moul text-2xl mb-6 neon-glow">តើអ្នកឈ្មោះអ្វី?</h2>
+        <input type="text" id="searchInput" class="search-input" placeholder="ស្វែងរកឈ្មោះរបស់អ្នក...">
+        <div id="nameList" class="name-box"></div>
+        <p onclick="skipToMode()" class="skip-text font-sigma">SKIP LOGIN</p>
+    </div>
+
+    <!-- STEP 2: THOUGHT INPUT -->
+    <div id="step2" class="step-screen hidden">
+        <h2 class="khmer-moul text-2xl mb-2 neon-glow">និយាយរឿងក្នុងចិត្ត</h2>
+        <p id="targetUser" class="font-sigma text-[9px] text-cyan-400 mb-6"></p>
+        <textarea id="thoughtInput" class="sigma-textarea" placeholder="សរសេរអ្វីម្យ៉ាង..."></textarea>
+        <div onclick="finishOnboarding()" class="btn-sigma mt-6 font-sigma">CONFIRM & ENTER</div>
+    </div>
+
+    <!-- STEP 3: MODE PICKER -->
+    <div id="step3" class="step-screen hidden">
+        <h2 class="khmer-moul text-2xl mb-10 neon-glow">ជ្រើសរើសវេនសិក្សា</h2>
+        <div class="flex flex-col md:flex-row gap-6 w-full max-w-xl">
+            <div onclick="launch('morning')" class="flex-1 p-8 bg-white/5 border border-white/10 rounded-2xl text-center cursor-pointer hover:border-cyan-400 transition-all">
+                <span class="text-5xl mb-4 block">🌅</span>
+                <h3 class="khmer-moul text-xl">ពេលព្រឹក</h3>
+            </div>
+            <div onclick="launch('afternoon')" class="flex-1 p-8 bg-white/5 border border-white/10 rounded-2xl text-center cursor-pointer hover:border-pink-500 transition-all">
+                <span class="text-5xl mb-4 block">☀️</span>
+                <h3 class="khmer-moul text-xl text-pink-500">ពេលថ្ងៃ</h3>
+            </div>
         </div>
     </div>
 
-    <!-- APP -->
+    <!-- MAIN APP -->
     <div id="mainApp" class="hidden">
-        <div id="notifStack" class="notif-stack"></div>
-
-        <header class="p-6 max-w-6xl mx-auto flex flex-col items-center gap-6">
-            <div class="flex items-center gap-4 w-full justify-start">
-                <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-2xl">⚡</div>
-                <div>
-                    <h2 class="khmer-moul text-lg">កាលវិភាគ 7B2</h2>
-                    <p id="sessionTag" class="font-sigma text-[8px] text-cyan-400 uppercase"></p>
-                </div>
+        <header class="p-6 max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-cyan-600 rounded-lg flex items-center justify-center">🔱</div>
+                <h1 class="khmer-moul text-md">7B2 SYSTEM</h1>
             </div>
-
-            <div class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-center">
-                <div id="clock" class="font-sigma text-4xl mb-1">00:00:00</div>
-                <div id="date" class="khmer-moul text-[9px] opacity-40 uppercase"></div>
+            <div class="text-right">
+                <div id="clock" class="font-sigma text-xl">00:00:00</div>
+                <p id="userLabel" class="text-[8px] text-cyan-400 font-sigma"></p>
             </div>
         </header>
 
-        <main id="scheduleGrid" class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
-            <!-- Items injected by JS -->
-        </main>
+        <div class="px-6 max-w-6xl mx-auto">
+            <div class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-center mb-8">
+                <p id="dateLabel" class="khmer-moul text-[9px] opacity-40"></p>
+            </div>
+            <main id="grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20"></main>
+        </div>
 
-        <footer class="py-16 text-center">
-            <p class="font-sigma text-[8px] opacity-20 mb-4 tracking-[1.5em]">CREATED BY</p>
-            <h2 class="khmer-moul text-3xl neon-signature">មាស ប៊ុណ្ណាVit</h2>
+        <footer class="py-20 text-center">
+            <p class="font-sigma text-[8px] opacity-20 tracking-[1.5em] mb-4">ENGINEERED BY</p>
+            <h2 class="khmer-moul text-4xl neon-glow">មាស ប៊ុណ្ណាVit</h2>
         </footer>
     </div>
 
     <script>
-        const scheduleData = [
-            { day: 'ចន្ទ (Monday)', list: ['អង់គ្លេស', 'ប្រវត្តិវិទ្យា', 'គណិតវិទ្យា', 'គណិតវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
-            { day: 'អង្គារ (Tuesday)', list: ['អក្សរសាស្ត្រខ្មែរ', 'ភាសាចិន', 'ផែនដីវិទ្យា', 'ភូមិវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
-            { day: 'ពុធ (Wednesday)', list: ['គណិតវិទ្យា', 'គណិតវិទ្យា', 'គីមីវិទ្យា', 'ជីវវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
-            { day: 'ព្រហស្បតិ៍ (Thursday)', list: ['អក្សរសាស្ត្រខ្មែរ', 'អក្សរសាស្ត្រខ្មែរ', 'សីលធម៌-ពលរដ្ឋ', 'ជីវវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
-            { day: 'សុក្រ (Friday)', list: ['អក្សរសាស្ត្រខ្មែរ', 'អក្សរសាស្ត្រខ្មែរ', 'សីលធម៌-ពលរដ្ឋ', 'រូបវិទ្យា'], times: ['13:00', '14:00', '15:00', '16:00'] },
-            { day: 'សៅរ៍ (Saturday)', list: ['ភូមិវិទ្យា', 'គណិតវិទ្យា', 'គណិតវិទ្យា', 'អង់គ្លេស'], times: ['13:00', '14:00', '15:00', '16:00'] }
+        const students = ["ខុម សុខឡាង", "ដួន លីស្រីគីម", "ចាន់ ស្រីពេជ្រ", "ច័ន្ទ អេរីហហ្សា", "ជា ឆាយលី", "ឈួន ចំណានស្រីណែ", "ដេត វឌ្ឍនា", "ឌី ដាវិត", "ណាង សុគន្ធធារី", "ភយ ឡេងហូ", "តែម ណារ៉ុង", "ថាក់ សុគន្ធកេសរ", "ធ្លាង គុជកុម្ភៈ", "ឌីង ចាន់សុខារ៉ាភីទិ", "ទុយ ដុងហុង", "ធន មុនីរាជ", "ធន ភារត", "ធឿន សីលា", "ប៉េង សត្តាមុនី", "បុណ្យ សោភា", "មាស ប៊ុណ្ណាVit", "ឫទ្ធី ពន្លឺដារ៉ា", "រស់ ម៉ាណាត", "រិន គីមអេង", "រាជសីហ៍ បញ្ចពណ៌", "រុណ បញ្ញា", "រុន ចាន់ស្រីពេជ្រ", "លី ភារា", "លី បញ្ញាលីកា", "លីន តេជោវឌ្ឍនៈ", "លីសុភៀង ខាង", "វណ្ណា សុនិតា", "វណ្ណា សុភារី", "ស៊ាង ស្រីពេជ្រ", "ស៊ាង រ៉ាលី", "សុខ រក្សា", "សុខ ហេង", "ស៊ូ សុខបញ្ញា", "សួស ស្រីនាថ", "សឿន ស៊ីថាវ៉ិត", "សោម រដ្ឋា", "សៅ ចាន់នី", "ស្រី ឡោ", "ស្រី ពេជ្រ", "ហាម ហៀងលាង", "ហ៊ឺ ហៀង", "ហ៊ួត លក្ខិណា", "ហ៊ាន ពេជ្រសុវណ្ណដារិទ្ធ", "ហុក ធីតា", "អ៊ុង កែវរត្ននា", "អ៊ុំ ចាន់វិយា", "អ៊ុង វីហា"];
+        
+        const schedule = [
+            { d: 'ចន្ទ (Monday)', s: ['អង់គ្លេស', 'ប្រវត្តិវិទ្យា', 'គណិតវិទ្យា', 'គណិតវិទ្យា'] },
+            { d: 'អង្គារ (Tuesday)', s: ['អក្សរសាស្ត្រខ្មែរ', 'ភាសិន', 'ផែនដីវិទ្យា', 'ភូមិវិទ្យា'] },
+            { d: 'ពុធ (Wednesday)', s: ['គណិតវិទ្យា', 'គណិតវិទ្យា', 'គីមីវិទ្យា', 'ជីវវិទ្យា'] },
+            { d: 'ព្រហស្បតិ៍ (Thursday)', s: ['អក្សរសាស្ត្រខ្មែរ', 'អក្សរសាស្ត្រខ្មែរ', 'សីលធម៌-ពលរដ្ឋ', 'ជីវវិទ្យា'] },
+            { d: 'សុក្រ (Friday)', s: ['អក្សរសាស្ត្រខ្មែរ', 'អក្សរសាស្ត្រខ្មែរ', 'សីលធម៌-ពលរដ្ឋ', 'រូបវិទ្យា'] },
+            { d: 'សៅរ៍ (Saturday)', s: ['ភូមិវិទ្យា', 'គណិតវិទ្យា', 'គណិតវិទ្យា', 'អង់គ្លេស'] }
         ];
 
-        const avatars = [
-            { n: "SIGMA BOY", p: "https://files.catbox.moe/7d1nsp.jpeg" },
-            { n: "The me", p: "https://files.catbox.moe/3nnv91.jpeg" },
-            { n: "Alien", p: "https://files.catbox.moe/ktl2m7.jpeg" },
-            { n: "Your Boyfriend", p: "https://files.catbox.moe/0g2t2o.jpeg" }
-        ];
+        let currentUser = localStorage.getItem('sigma_user') || "";
+        let currentMode = "";
+        const webhook = "https://discord.com/api/webhooks/1414970670013612064/GYfrravPexHUQhXQQjD4F6w_DBaLGziKNBo6mmYlBk9vbgXtMRjtZ8BCWdh4KoPG90eu";
 
-        const music = document.getElementById('bgMusic');
-        const sfx = document.getElementById('notifSfx');
-
-        // STOP SOUND ON TAB LEAVE
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                music.pause();
+        window.onload = () => {
+            if (currentUser) {
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step3').classList.remove('hidden');
             } else {
-                if (!document.getElementById('mainApp').classList.contains('hidden')) {
-                    music.play().catch(() => {});
-                }
+                initSearch();
             }
-        });
+            setInterval(updateClock, 1000);
+            updateClock();
+        };
 
-        function initApp(mode) {
-            music.play().catch(() => {});
-            document.getElementById('selector').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-            document.getElementById('sessionTag').innerText = `SESSION // ${mode}`;
-            
-            renderGrid();
-            
-            // AUTO SCROLL TO TODAY
-            setTimeout(() => {
-                const active = document.querySelector('.card-active');
-                if (active) {
-                    active.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-                startNotifs();
-            }, 600);
-        }
-
-        function startNotifs() {
-            const stack = document.getElementById('notifStack');
-            avatars.forEach((a, i) => {
-                setTimeout(() => {
-                    if (document.hidden) return; // Don't play if tab is hidden
-                    sfx.currentTime = 0;
-                    sfx.play().catch(() => {});
-
-                    const div = document.createElement('div');
-                    div.className = 'notif-card';
-                    div.innerHTML = `
-                        <img src="${a.p}" style="width:45px; height:45px; border-radius:8px; border:1px solid var(--cyan)">
-                        <div>
-                            <p class="font-sigma text-[6px] text-cyan-400">DATA_PKT_REC</p>
-                            <p class="text-[11px] font-bold">${a.n}</p>
-                        </div>
-                    `;
-                    stack.appendChild(div);
-                    setTimeout(() => div.classList.add('active'), 50);
-                    setTimeout(() => {
-                        div.classList.remove('active');
-                        setTimeout(() => div.remove(), 600);
-                    }, 4000);
-                }, i * 2000);
+        function initSearch(f = "") {
+            const list = document.getElementById('nameList');
+            list.innerHTML = "";
+            students.filter(n => n.includes(f)).forEach(name => {
+                const d = document.createElement('div');
+                d.className = 'name-row';
+                d.innerText = name;
+                d.onclick = () => {
+                    currentUser = name;
+                    document.getElementById('targetUser').innerText = `USER: ${name}`;
+                    document.getElementById('step1').classList.add('hidden');
+                    document.getElementById('step2').classList.remove('hidden');
+                };
+                list.appendChild(d);
             });
         }
 
-        function renderGrid() {
-            const grid = document.getElementById('scheduleGrid');
-            grid.innerHTML = '';
+        document.getElementById('searchInput').oninput = (e) => initSearch(e.target.value);
+
+        async function finishOnboarding() {
+            const msg = document.getElementById('thoughtInput').value;
+            localStorage.setItem('sigma_user', currentUser);
             
-            const pph = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Phnom_Penh"}));
-            let day = pph.getDay(); // 0-6
-            let hr = pph.getHours();
-            // If it's night (past 9 PM), show next day
+            // SEND TO DISCORD
+            fetch(webhook, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ content: `**User:** [${currentUser}]\n**Message:** ${msg || "No message"}` })
+            }).catch(e => console.error(e));
+
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+        }
+
+        function skipToMode() {
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+        }
+
+        function launch(m) {
+            currentMode = m;
+            document.getElementById(m === 'morning' ? 'musMorning' : 'musAfternoon').play().catch(() => {});
+            document.getElementById('step3').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('userLabel').innerText = currentUser || "GUEST_SIGMA";
+            
+            renderSchedule();
+            setTimeout(() => {
+                const active = document.querySelector('.active-day');
+                if (active) active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 500);
+        }
+
+        function renderSchedule() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = "";
+            const phn = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Phnom_Penh"}));
+            let day = phn.getDay();
+            let hr = phn.getHours();
             let target = (hr >= 21) ? (day + 1) % 7 : day;
 
-            scheduleData.forEach((item, idx) => {
-                const currentDayIndex = idx + 1; // Mon=1, Sat=6
-                const isActive = (currentDayIndex === target);
-                
+            schedule.forEach((data, idx) => {
+                const dayIdx = idx + 1;
+                const active = (dayIdx === target);
                 const card = document.createElement('div');
-                card.className = `card-glass ${isActive ? 'card-active' : 'opacity-25'}`;
+                card.className = `glass-card ${active ? 'active-day' : 'opacity-20'}`;
+                
+                let rows = "";
+                data.s.forEach(s => rows += `<div class="flex justify-between p-3 bg-white/5 rounded-lg mb-2"><span class="text-xs font-bold">${s}</span><span class="font-sigma text-[7px] text-cyan-400">SESSION</span></div>`);
 
-                let subjects = '';
-                item.list.forEach((sub, sIdx) => {
-                    subjects += `
-                        <div class="item-box">
-                            <span class="text-xs font-bold">${sub}</span>
-                            <span class="font-sigma text-[7px] text-cyan-400 opacity-60">${item.times[sIdx]}</span>
-                        </div>
-                    `;
-                });
-
-                card.innerHTML = `
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="khmer-moul text-sm ${isActive ? 'text-cyan-400' : ''}">${item.day}</h3>
-                        ${isActive ? '<span class="px-2 py-0.5 bg-cyan-500 text-black font-sigma text-[6px] rounded font-bold">TODAY</span>' : ''}
-                    </div>
-                    <div>${subjects}</div>
-                `;
+                card.innerHTML = `<div class="flex justify-between items-center mb-4"><h3 class="khmer-moul text-sm ${active ? 'text-cyan-400' : ''}">${data.d}</h3>${active ? '<span class="text-[7px] bg-cyan-500 text-black px-2 rounded font-bold">LIVE</span>':''}</div>${rows}`;
                 grid.appendChild(card);
             });
         }
 
         function updateClock() {
-            const now = new Date();
-            const timeStr = now.toLocaleString("en-US", {timeZone: "Asia/Phnom_Penh", hour:'2-digit', minute:'2-digit', second:'2-digit', hour12: false});
-            const dateStr = now.toLocaleString("km-KH", {timeZone: "Asia/Phnom_Penh", weekday: 'long', day: 'numeric', month: 'long'});
-            document.getElementById('clock').innerText = timeStr;
-            document.getElementById('date').innerText = dateStr;
+            const n = new Date();
+            const t = n.toLocaleString("en-US", {timeZone: "Asia/Phnom_Penh", hour:'2-digit', minute:'2-digit', second:'2-digit', hour12: false});
+            const d = n.toLocaleString("km-KH", {timeZone: "Asia/Phnom_Penh", weekday: 'long', day: 'numeric', month: 'long'});
+            document.getElementById('clock').innerText = t;
+            document.getElementById('dateLabel').innerText = d;
         }
 
-        setInterval(updateClock, 1000);
-        updateClock();
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                document.getElementById('musMorning').pause();
+                document.getElementById('musAfternoon').pause();
+            } else if (currentMode) {
+                document.getElementById(currentMode === 'morning' ? 'musMorning' : 'musAfternoon').play().catch(() => {});
+            }
+        });
     </script>
 </body>
 </html>
